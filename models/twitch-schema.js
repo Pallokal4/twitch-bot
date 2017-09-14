@@ -1,8 +1,10 @@
 var db = require('../server/Database.js');
 
 var TwitchSchema = db.Schema({
-    username: {type:String, required: true },
-    created: {type: Date, default: Date.now}
+    user: {type:String, required: true },
+    type: {type:String, required: true },
+    data: {type:"Mixed", required: true },
+    created: {type: Date, default: Date.now},
     
 }); 
 

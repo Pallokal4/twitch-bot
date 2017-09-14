@@ -35,9 +35,10 @@ class Twitch {
     }
     
     checkOnline(){
+        const uid = this.userId, query = this.query;
         return new Promise(function (fulfill, reject){
-        var urls = queryURL(this.userId);
-            this.query(urls.stream, (err, data) => {
+        var urls = queryURL(uid);
+            query(urls.stream, (err, data) => {
                 try {
                     fulfill(JSON.parse(data));
                   } catch (ex) {
@@ -62,10 +63,12 @@ class Twitch {
         (err, data) => callback(err, data));
     }
     
-    callback(err, data){
-        console.log(data);
-    }
-
     
 }
 
+/*var derp = new Twitch("officialandypyro");
+derp.checkOnline().then((res) => {
+    console.log("res", res);
+})*/
+
+module.exports = Twitch;

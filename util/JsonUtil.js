@@ -1,9 +1,12 @@
 module.exports = {
     isOnline: (obj) => {
         var result = false;
+        console.log(obj.stream);
         if(obj){
-            if(typeof obj.stream !== "null" && obj._id){
-                result = true;
+            if(obj.stream){
+                if(obj.stream._id){
+                    result = true;
+                }
             }
         }
         return result;

@@ -24,6 +24,7 @@
     "concurrently": "^3.5.0",
     "curlrequest": "^1.0.1",
     "express": "^4.15.3",
+    "irc-framework": "^2.9.1",
     "node-cron": "^1.2.1",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
