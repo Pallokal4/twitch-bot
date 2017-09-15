@@ -24,35 +24,28 @@ bot.on('registered', function() {
 	channel.join();
 });
 
-bot.on('close', function() {
-	console.log('Connection close');
-});
-
 bot.on('message', function(event) {
-        var data = new twitchdb({
-                        user: event.target.replace("#", ""),
-                        type: "message",
-                        data: event
-                    });
-        data.save();
-        console.log("bot raw", bot.raw('NAMES', "#pallokala"));
+        saveData(event, 'message');
 	//console.log('<' + event.target + '>', event.nick, event.message, event);
 });
 
 bot.on('join', function(event) {
-	var data = new twitchdb({
-                        user: event.target.replace("#", ""),
-                        type: "join",
-                        data: event
-                    });
-        data.save();
+	saveData(event, 'join');
 });
 
 bot.on('part', function(event) {
-	var data = new twitchdb({
+        saveData(event, 'part');
+});
+
+bot.on('close', function() {
+	console.log('Connection close');
+});
+
+const saveData = (event, type) => {
+    var data = new twitchdb({
                         user: event.target.replace("#", ""),
-                        type: "part",
+                        type: type,
                         data: event
                     });
-        data.save();
-});
+    data.save();
+}
