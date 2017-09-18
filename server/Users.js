@@ -40,7 +40,7 @@ class Users {
                         twitchdb.find({}, function (err, docs) {
                             console.log("wat :0", err, docs);
                           });
-                    })
+                    });
                 }); 
            }
         });

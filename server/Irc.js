@@ -11,12 +11,6 @@ function Middleware() {
 
 bot.use(Middleware());
 
-bot.connect({
-	host: Config.twitchHost,
-	nick: Config.twitchNick,
-        password: Config.twitchOauth
-});
-
 
 bot.on('registered', function() {
 	console.log('Connected!');
@@ -42,10 +36,22 @@ bot.on('close', function() {
 });
 
 const saveData = (event, type) => {
+    if(event.target){
     var data = new twitchdb({
                         user: event.target.replace("#", ""),
                         type: type,
                         data: event
                     });
     data.save();
+    }
+};
+
+module.exports = {
+    start: () => {
+        bot.connect({
+            host: Config.twitchHost,
+            nick: Config.twitchNick,
+            password: Config.twitchOauth
+        });
+    }
 }
