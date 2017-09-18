@@ -1,7 +1,12 @@
 import express from 'express';
 
+var bodyParser = require('body-parser');
+
 const path = require('path');
 const app = express();
+
+app.use(bodyParser.json() );
+app.use('/api/users', require('./routes/users'));
 
 app.use(express.static(path.resolve(__dirname, 'public')));
 
