@@ -7,6 +7,7 @@ const app = express();
 
 app.use(bodyParser.json() );
 app.use('/api/users', require('./routes/users'));
+app.use('/api/twitch', require('./routes/twitch'));
 
 app.use(express.static(path.resolve(__dirname, 'public')));
 
