@@ -2,20 +2,12 @@ var config = require('../config');
 var Twitch = require('./Twitch');
 var JsonUtil = require('../util/JsonUtil');
 var twitchdb = require ('../models/twitch');
+var User = require ('../models/user');
 
-
-const userList = (list) => {
-    var array = Object.keys(list).map((val, i) => {
-        var obj = new Twitch(val);
-        return obj;
-    }) || [];
-    return array;
-}
 
 class Users {
-    constructor(){
-        this.users = userList(config.users);
-
+    constructor(users){
+        this.users = users;
     }
     
     checkOnline(){
@@ -48,9 +40,10 @@ class Users {
 }
 /*
 var derp = new Users();
-derp.checkOnline();
+console.log(derp.users);
+
 setTimeout(function(){
-    derp.saveData();
-}, 2000);
-*/
+    console.log(derp.users);
+}, 2000);*/
+
 module.exports = Users;

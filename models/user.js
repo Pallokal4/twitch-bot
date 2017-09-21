@@ -1,5 +1,5 @@
 var db = require('../server/Database.js');
-var UserSchema = require('./twitch-schema');
+var UserSchema = require('./user-schema');
 
 var User = db.model('User', UserSchema);
 

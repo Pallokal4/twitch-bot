@@ -11,26 +11,32 @@ const queryURL = (user) => {
 }
 
 class Twitch {
-    constructor(user){
+    constructor(user, id){
         this.data ="";
         this.user = user;
-        this.userId = config.users[user];
+        this.userId = id;
         this.isOnline = false;
 
     }
     
     getUserId(){
-        var urls = queryURL(this.user);
+        var urls = queryURL(this.user), query = this.query;
         var userId;
-        
-        this.query(urls.user, (err, data) => {
-            data = JSON.parse(data);
-            if(data.users){
-                data.users.forEach((val, i) => {
-                    this.userId = val._id;
-                    console.log("val._id", val._id);
-                });
-            }
+        return new Promise((fulfill, reject) => {
+            query(urls.user, (err, data) => {
+                try {
+                    data = JSON.parse(data);
+                    if(data.users){
+                        data.users.forEach((val, i) => {
+                            if(val._id){
+                                fulfill(val._id);
+                            }
+                        });
+                    }
+                }catch (ex) {
+                    reject(ex, err);
+                }
+            });
         });
     }
     
