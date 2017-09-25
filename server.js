@@ -1,8 +1,11 @@
 require('babel-register');
-//var cron = require('./server/Cron');
-//var irc = require('./server/Irc');
+require("babel-core/register");
+require("babel-polyfill");
 
-//cron.start();
-//irc.start();
+var cron = require('./server/Cron');
+var irc = require('./server/Irc');
+
+cron.start();
+irc.start();
 
 require('./server.babel');

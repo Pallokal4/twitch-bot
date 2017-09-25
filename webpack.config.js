@@ -2,7 +2,7 @@
     var path = require('path');
 
 module.exports = {
-  entry: './src/client.js',
+  entry: ['babel-polyfill', 'regenerator-runtime/runtime','./src/client.js'],
   output: {
     path: __dirname + '/public/',
     publicPath: '/',

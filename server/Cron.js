@@ -3,52 +3,43 @@ var Users = require('./Users');
 var User = require ('../models/user');
 var Twitch = require('./Twitch');
 
-const userList = () => {
-    return new Promise((fulfill, reject) => {
-        User.find({}, (err, docs) => {
-         fulfill(docs.map((val, i) => {
-             return new Twitch(val.username, val.twitchKey);
-         }));
-        });
-    });
-}
-
-async function getUsers(){
+async function userList() {
     var users = [];
-    await userList().then((res) => {
-        derp = new Users(res);
+    await User.find({}, (err, docs) => {
+        users = docs.map((val, i) => {
+             return new Twitch(val.username, val.twitchKey);
+        })
     });
-    return users;
+    return new Users(users);
 }
 
-var streams = getUsers();
-
-
-const jobs = [
+async function startJobs() {
+    var streams = await userList();
+    
+    const jobs = [
       cron.schedule('*/10 * * * *', function(){
-          streams.checkOnline();
         console.log("update onlinestatus");
+        if(streams){
+             streams.checkOnline();
+        }
       }),
       
       cron.schedule('* * * * *', function(){
-          streams.saveData();
-        console.log('get data of online users');
+          console.log('get data of online users', streams, streams.Users);
+          if(streams){
+              streams.saveData();
+          }
       })
-];
-
-jobs.forEach((val, i) => {
+    ];
+    
+    jobs.forEach((val, i) => {
             val.start();
-        });
+    });
+}
+
+
+
 
 module.exports = {
-    start: () => {
-        jobs.forEach((val, i) => {
-            val.start();
-        });
-    },
-    stop: () => {
-        jobs.forEach((val, i) => {
-            val.stop();
-        });
-    }
+    start: () => startJobs()
 };
