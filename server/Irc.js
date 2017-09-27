@@ -1,6 +1,7 @@
 var IRC = require('irc-framework');
 var Config = require('../config');
 var bot = new IRC.Client();
+var User = require ('../models/user');
 var twitchdb = require ('../models/twitch');
 
 function Middleware() {
@@ -9,13 +10,31 @@ function Middleware() {
 	}
 }
 
+async function users() {
+    var users = [];
+    await User.find({}, (err, docs) => {
+        users = docs.map((val, i) => {
+             return val.username
+        })
+    });
+    return users;
+}
+
+var userlist = [];
+
+
 bot.use(Middleware());
 
 
 bot.on('registered', function() {
 	console.log('Connected!');
-	var channel = bot.channel('#pallokala');
-	channel.join();
+        userlist.map((val, i) => {
+            var channel = bot.channel('#'+val);
+            channel.join();
+            channel.say(':3');
+        })
+	//var channel = bot.channel('#pallokala');
+	//channel.join();
 });
 
 bot.on('message', function(event) {
@@ -47,7 +66,8 @@ const saveData = (event, type) => {
 };
 
 module.exports = {
-    start: () => {
+    start: async () => {
+        userlist = await users();
         bot.connect({
             host: Config.twitchHost,
             nick: Config.twitchNick,

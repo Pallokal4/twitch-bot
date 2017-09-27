@@ -1,18 +1,21 @@
 import express from 'express';
+var fallback = require('express-history-api-fallback')
+const path = require('path');
+
 
 var bodyParser = require('body-parser');
+var root = path.resolve(__dirname, 'public');
 
-const path = require('path');
+
 const app = express();
 
 app.use(bodyParser.json() );
 app.use('/api/users', require('./routes/users'));
 app.use('/api/twitch', require('./routes/twitch'));
 
-app.use(express.static(path.resolve(__dirname, 'public')));
+app.use(express.static(root));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
-});
+app.use(fallback('index.html', { root: root }));
 
 app.listen(process.env.PORT || 3000);
+
