@@ -3,6 +3,7 @@ var Config = require('../config');
 var bot = new IRC.Client();
 var User = require ('../models/user');
 var twitchdb = require ('../models/twitch');
+var moment = require('moment');
 
 function Middleware() {
 	return function(client, raw_events, parsed_events) {
@@ -22,42 +23,55 @@ async function users() {
 
 var userlist = [];
 
+var channelUsers = {};
+
 
 bot.use(Middleware());
 
 
 bot.on('registered', function() {
-	console.log('Connected!');
         userlist.map((val, i) => {
-            var channel = bot.channel('#'+val);
+            var user = val.toLowerCase();
+            var channel = bot.channel('#'+user);
             channel.join();
-            channel.say(':3');
         })
 	//var channel = bot.channel('#pallokala');
 	//channel.join();
 });
 
 bot.on('message', function(event) {
-        saveData(event, 'message');
+        saveData(event.target, 'message', event);
 	//console.log('<' + event.target + '>', event.nick, event.message, event);
 });
 
 bot.on('join', function(event) {
-	saveData(event, 'join');
+        var channel = event.channel.replace("#", "");
+        var obj = channelUsers[channel] || {};
+        obj[event.nick] = {join: moment().format()};
+        channelUsers[channel] = obj;
+        console.log("join", channelUsers);
 });
 
 bot.on('part', function(event) {
-        saveData(event, 'part');
+        var channel = event.channel.replace("#", "");
+        if(channelUsers[channel]){
+            if(channelUsers[channel][event.nick].join){
+                console.log("save joinpart", {nick: event.nick, join: channelUsers[channel][event.nick].join, part: moment().format()});
+                saveData(event.channel, 'joinpart', {nick: event.nick, join: channelUsers[channel][event.nick].join, part: moment().format()});
+                channelUsers[channel][event.nick] = null;
+            }
+        }
+        console.log("part", event);
 });
 
 bot.on('close', function() {
 	console.log('Connection close');
 });
 
-const saveData = (event, type) => {
-    if(event.target){
+const saveData = (channel, type, event) => {
+    if(channel){
     var data = new twitchdb({
-                        user: event.target.replace("#", ""),
+                        user: channel.replace("#", ""),
                         type: type,
                         data: event
                     });

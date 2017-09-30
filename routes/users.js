@@ -25,6 +25,12 @@ router.post('/add', (req, res) => {
     
 })
 
+router.get('/getUser/:user', (req, res) => {
+    User.find({username: req.params.user}, function (err, docs) {
+        res.json(docs);
+    });
+})
+
 router.get('/getUsers', (req, res) => {
     User.find({}, function (err, docs) {
         res.json(docs);
