@@ -3,6 +3,7 @@ var Twitch = require('./Twitch');
 var JsonUtil = require('../util/JsonUtil');
 var twitchdb = require ('../models/twitch');
 var User = require ('../models/user');
+var moment = require('moment');
 
 
 class Users {
@@ -13,7 +14,23 @@ class Users {
     checkOnline(){
         this.users.forEach((val, i) => {
            val.checkOnline().then((res) => {
-               val.setIsOnline(JsonUtil.isOnline(res));
+               var isOnline = JsonUtil.isOnline(res);
+               var onlineTime = val.getStreamOnline();
+               if(isOnline && !val.getIsOnline()){
+                   val.setStreamOnline(moment().format());
+               }
+               val.setIsOnline(isOnline);
+               
+               if(!isOnline && onlineTime){
+                   var data = new twitchdb({
+                        user: val.user,
+                        type: "apionline",
+                        data: {start: onlineTime, end: moment().format()}
+                    });
+                    data.save();
+                   val.setStreamOnline(null);
+                   
+               }
            }); 
         });
     }
@@ -28,11 +45,7 @@ class Users {
                         type: "api",
                         data: res.stream
                     });
-                    data.save().then((val) => {
-                        twitchdb.find({}, function (err, docs) {
-                            console.log("wat :0", err, docs);
-                          });
-                    });
+                    data.save();
                 }); 
            }
         });

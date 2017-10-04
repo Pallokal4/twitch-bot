@@ -49,23 +49,28 @@ bot.on('join', function(event) {
         var obj = channelUsers[channel] || {};
         obj[event.nick] = {join: moment().format()};
         channelUsers[channel] = obj;
-        console.log("join", channelUsers);
 });
 
 bot.on('part', function(event) {
         var channel = event.channel.replace("#", "");
         if(channelUsers[channel]){
+            if(channelUsers[channel][event.nick]){
             if(channelUsers[channel][event.nick].join){
-                console.log("save joinpart", {nick: event.nick, join: channelUsers[channel][event.nick].join, part: moment().format()});
                 saveData(event.channel, 'joinpart', {nick: event.nick, join: channelUsers[channel][event.nick].join, part: moment().format()});
                 channelUsers[channel][event.nick] = null;
             }
+            }
         }
-        console.log("part", event);
 });
 
 bot.on('close', function() {
 	console.log('Connection close');
+});
+
+bot.on('adduser', function(user){
+    console.log("user added!", user);
+    var channel = bot.channel('#'+user);
+    channel.join();
 });
 
 const saveData = (channel, type, event) => {
@@ -87,5 +92,6 @@ module.exports = {
             nick: Config.twitchNick,
             password: Config.twitchOauth
         });
-    }
+    },
+    bot: bot
 }

@@ -16,7 +16,7 @@ class Twitch {
         this.user = user;
         this.userId = id;
         this.isOnline = false;
-
+        this.streamOnline = null;
     }
     
     getUserId(){
@@ -52,6 +52,12 @@ class Twitch {
                   }
             });
         });
+    }
+    
+    getStreamOnline() { return this.streamOnline;}
+    
+    setStreamOnline(value) {
+        this.streamOnline = value;
     }
     
     getIsOnline() { return this.isOnline;}

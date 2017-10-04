@@ -1,6 +1,7 @@
 var router = require('express').Router();
 var User = require ('../models/user');
 var Twitch = require('../server/Twitch');
+var Irc = require('../server/Irc');
 
 router.post('/add', (req, res) => {
     var username = req.body.user.username;
@@ -13,6 +14,7 @@ router.post('/add', (req, res) => {
         });
         
         user.save().then((usr) => {
+            Irc.bot.emit('adduser', username );
             res.json({
                 user: usr,
                 message: 'success'
@@ -24,6 +26,7 @@ router.post('/add', (req, res) => {
     })
     
 })
+
 
 router.get('/getUser/:user', (req, res) => {
     User.find({username: req.params.user}, function (err, docs) {

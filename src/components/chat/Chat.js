@@ -77,10 +77,16 @@ class Chat extends Component {
             }
         ];
         
+        
+        var userSorted = Object.keys(this.state.users).sort((a,b) => {return this.state.users[b]-this.state.users[a]});
+        var userslisted = userSorted.map((val, i) => {
+                return this.state.users[val];
+        })
+        
         const userData = [
             {
-              x: Object.keys(this.state.users),
-              y: Object.values(this.state.users),
+              x: userSorted.slice(0, 10),
+              y: userslisted.slice(0,10),
               type: 'bar'
             }
         ];

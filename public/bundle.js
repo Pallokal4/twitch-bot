@@ -53847,6 +53847,8 @@ var Chat = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
+            var _this3 = this;
+
             var monthData = [{
                 x: (0, _keys2.default)(this.state.months).map(function (val) {
                     return (0, _moment2.default)().month(val).format("MMM");
@@ -53869,9 +53871,16 @@ var Chat = function (_Component) {
                 type: 'bar'
             }];
 
+            var userSorted = (0, _keys2.default)(this.state.users).sort(function (a, b) {
+                return _this3.state.users[b] - _this3.state.users[a];
+            });
+            var userslisted = userSorted.map(function (val, i) {
+                return _this3.state.users[val];
+            });
+
             var userData = [{
-                x: (0, _keys2.default)(this.state.users),
-                y: (0, _values2.default)(this.state.users),
+                x: userSorted.slice(0, 10),
+                y: userslisted.slice(0, 10),
                 type: 'bar'
             }];
 
