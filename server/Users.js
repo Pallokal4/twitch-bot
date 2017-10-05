@@ -1,5 +1,6 @@
 var config = require('../config');
 var Twitch = require('./Twitch');
+var Discord = require('./Discord');
 var JsonUtil = require('../util/JsonUtil');
 var twitchdb = require ('../models/twitch');
 var User = require ('../models/user');
@@ -8,7 +9,12 @@ var moment = require('moment');
 
 class Users {
     constructor(users){
-        this.users = users;
+        this.users = [];
+    }
+    
+    addUser(user){
+      console.log("push user!");
+      this.users.push(user);
     }
     
     checkOnline(){
@@ -17,6 +23,7 @@ class Users {
                var isOnline = JsonUtil.isOnline(res);
                var onlineTime = val.getStreamOnline();
                if(isOnline && !val.getIsOnline()){
+                   Discord.emit("streamonline", val);
                    val.setStreamOnline(moment().format());
                }
                val.setIsOnline(isOnline);
@@ -37,7 +44,7 @@ class Users {
     
     saveData(){
         this.users.forEach((val, i) => {
-            console.log("isonline", val.isOnline);
+            console.log("isonline", val.isOnline, val.user);
            if(val.isOnline){
               val.checkOnline().then((res) => {
                     var data = new twitchdb({
@@ -51,12 +58,7 @@ class Users {
         });
     }
 }
-/*
-var derp = new Users();
-console.log(derp.users);
 
-setTimeout(function(){
-    console.log(derp.users);
-}, 2000);*/
+var usrs = new Users();
 
-module.exports = Users;
+module.exports = usrs;

@@ -7,27 +7,25 @@ async function userList() {
     var users = [];
     await User.find({}, (err, docs) => {
         users = docs.map((val, i) => {
-             return new Twitch(val.username, val.twitchKey);
+             Users.addUser(new Twitch(val.username, val.twitchKey));
         })
     });
-    return new Users(users);
+    return Users;
 }
 
 async function startJobs() {
-    var streams = await userList();
+    await userList();
     
     const jobs = [
       cron.schedule('*/10 * * * *', function(){
-        console.log("update onlinestatus");
-        if(streams){
-             streams.checkOnline();
+        if(Users){
+             Users.checkOnline();
         }
       }),
       
       cron.schedule('* * * * *', function(){
-          console.log('get data of online users', streams, streams.Users);
-          if(streams){
-              streams.saveData();
+          if(Users){
+              Users.saveData();
           }
       })
     ];

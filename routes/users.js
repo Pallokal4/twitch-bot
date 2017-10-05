@@ -2,6 +2,7 @@ var router = require('express').Router();
 var User = require ('../models/user');
 var Twitch = require('../server/Twitch');
 var Irc = require('../server/Irc');
+var Users = require('../server/Users');
 
 router.post('/add', (req, res) => {
     var username = req.body.user.username;
@@ -15,6 +16,7 @@ router.post('/add', (req, res) => {
         
         user.save().then((usr) => {
             Irc.bot.emit('adduser', username );
+            Users.addUser(new Twitch(username, key));
             res.json({
                 user: usr,
                 message: 'success'

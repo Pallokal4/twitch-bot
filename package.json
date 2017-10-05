@@ -21,6 +21,8 @@
     "body-parser": "^1.18.1",
     "concurrently": "^3.5.0",
     "curlrequest": "^1.0.1",
+    "discord.io": "^2.5.3",
+    "discord.js": "^11.2.1",
     "express": "^4.15.3",
     "express-history-api-fallback": "^2.2.1",
     "irc-framework": "^2.9.1",
