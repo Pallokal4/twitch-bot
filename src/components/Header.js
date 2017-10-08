@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom'
+import {Grid, Row, Col, Accordion, Panel, NavItem, Nav} from 'react-bootstrap';
 
 class Header extends Component {
     
@@ -27,12 +28,12 @@ class Header extends Component {
     render() {
     return (
       <div>
-        <h1>Käyttäjät</h1>
-        <ul>
+        <h2>Käyttäjät</h2>
+        <Nav bsStyle="pills" stacked>
             {this.state.users.map((val, i) => {
-                return <li><Link to={'/user/'+val.username}>{val.username}</Link></li>
+                return <NavItem><Link to={'/user/'+val.username}>{val.username}</Link></NavItem>
             })}
-        </ul>
+        </Nav>
       </div>
     );
   }

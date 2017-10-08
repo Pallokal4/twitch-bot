@@ -7,13 +7,21 @@ import Users from './Users';
 import Header from './Header';
 import Pages from './Pages';
 
+import {Grid, Row, Col, Accordion, Panel, NavItem, Nav} from 'react-bootstrap';
+
 
 const Main = () => (
     <BrowserRouter>
-        <div>
-            <Header />
-            <Pages />
-        </div>
+        <Grid>
+            <Row>
+                <Col sm={3}>
+                    <Header />
+                </Col>
+                <Col sm={9}>
+                    <Pages />
+                </Col>
+            </Row>
+        </Grid>
     </BrowserRouter>
 );
 

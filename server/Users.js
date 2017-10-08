@@ -23,7 +23,7 @@ class Users {
                var isOnline = JsonUtil.isOnline(res);
                var onlineTime = val.getStreamOnline();
                if(isOnline && !val.getIsOnline()){
-                   Discord.emit("streamonline", val);
+                   Discord.bot.emit("streamonline", val);
                    val.setStreamOnline(moment().format());
                }
                val.setIsOnline(isOnline);
