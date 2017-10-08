@@ -19,6 +19,7 @@ class Chat extends Component {
     console.log(props);
     
        this.state = {
+           user: props.user,
            data: props.data || [],
            hours: getObject(24),
            days: getObject(7),
@@ -28,8 +29,9 @@ class Chat extends Component {
     }
     
     componentWillReceiveProps(props){
-        if(Object.keys(this.state.data).length !== Object.keys(props.data).length){
-            this.state.data = props.data;
+        if(this.state.user !== props.user){
+            this.state.user = props.user;
+            this.state.data = props.data || [];
             this.setState(this.state);
             this.processData();
         }

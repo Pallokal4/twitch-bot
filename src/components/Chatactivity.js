@@ -2,7 +2,13 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Chat from './chat/Chat';
 
-
+const getObject = (j) => {
+    var obj = {};
+    for(var i = 0; i < j; i++){
+        obj[i] = 0;
+    }
+    return obj;
+}
 
 class Chatactivity extends Component {
     
@@ -18,6 +24,7 @@ class Chatactivity extends Component {
     componentWillReceiveProps(props){
         if(this.state.user.username !== props.user.username){
             this.state.user = props.user;
+            this.state.data = [];
             this.setState(this.state);
             this.getUserdata();
         }
@@ -29,9 +36,10 @@ class Chatactivity extends Component {
             .then(res => {
               if(res.data){
                   this.state.data = res.data;
-                  console.log("res.data", res.data);
-                  this.setState(this.state);
+              }else {
+                  this.state.data = [];
               }
+              this.setState(this.state);
             });
     }
     
@@ -43,7 +51,7 @@ class Chatactivity extends Component {
         
     return (
       <div>
-         <Chat data={this.state.data} />
+         <Chat data={this.state.data} user={this.state.user.username} />
       </div>
     );
   }

@@ -18,6 +18,7 @@ class Api extends Component {
     componentWillReceiveProps(props){
         if(this.state.user.username !== props.user.username){
             this.state.user = props.user;
+            this.state.data = [];
             this.setState(this.state);
             this.getUserdata();
         }
@@ -29,9 +30,10 @@ class Api extends Component {
             .then(res => {
               if(res.data){
                   this.state.data = res.data;
-                  console.log("res.data", res.data);
-                  this.setState(this.state);
+              }else {
+                  this.state.data = [];
               }
+              this.setState(this.state);
             });
     }
     
@@ -43,7 +45,7 @@ class Api extends Component {
         
     return (
       <div>
-         <Apidata data={this.state.data} />
+         <Apidata data={this.state.data} user={this.state.user.username} />
       </div>
     );
   }

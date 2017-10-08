@@ -16,6 +16,16 @@ const getDates = (startDate, stopDate) => {
       return dates;
 }
 
+const average = (val, val2) => {
+    var result;
+    if(val){
+        result = (val + val2) / 2;
+    }else{
+        result = val2;
+    }
+    return result;
+}
+
 class MonthApi extends Component {
     
     constructor(props) {
@@ -24,7 +34,8 @@ class MonthApi extends Component {
        this.state = {
            user: props.user,
            data: [],
-           streamDays: getDates(moment().subtract(1, 'M').format(), moment().format())
+           streamDays: getDates(moment().subtract(1, 'M').format(), moment().format()),
+           streamViewers: getDates(moment().subtract(1, 'M').format(), moment().format())
        }
     }
     
@@ -52,6 +63,7 @@ class MonthApi extends Component {
         this.state.data.forEach((val, i) => {
             var date = moment(val.created);
             this.state.streamDays[date.format('DD-MM-YYYY')] += 1;
+            this.state.streamViewers[date.format('DD-MM-YYYY')] = average(this.state.streamViewers[date.format('DD-MM-YYYY')],val.data.viewers);
         })
         this.setState(this.state);
     }
@@ -63,7 +75,13 @@ class MonthApi extends Component {
     render() {
         
         const monthData = [
+            {type: 'scatter',  
+                name: 'Keskiarvo katsojia',
+        x: Object.keys(this.state.streamViewers),
+        y: Object.values(this.state.streamViewers) 
+    },
             {
+                name: 'Striimatut minuutit',
               x: Object.keys(this.state.streamDays),
               y: Object.values(this.state.streamDays),
               type: 'bar'

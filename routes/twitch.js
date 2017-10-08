@@ -3,7 +3,7 @@ var Twitch = require ('../models/twitch');
 var moment = require('moment');
 
 
-router.get('/chat/:user/:time', (req, res) => {
+router.get('/chat/:user', (req, res) => {
     Twitch.find({type: "message", user: req.params.user }, function (err, docs) {
         res.json(docs);
     });

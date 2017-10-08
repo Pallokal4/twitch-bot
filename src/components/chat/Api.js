@@ -38,6 +38,7 @@ class Api extends Component {
     console.log(props);
     
        this.state = {
+           user: props.user,
            data: props.data || [],
            hours: getObject(24),
            days: getObject(7),
@@ -113,7 +114,7 @@ class Api extends Component {
 
     return (
       <div>
-        <h2>Average viewers</h2>
+        <h2>Average viewers </h2>
         <h3>Month</h3>
         <PlotlyComponent className="whatever" data={monthData} />
         <h3>Weekday</h3>
